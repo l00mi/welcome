@@ -1,0 +1,122 @@
+<head>
+  <title>Welcome</title>
+  <link href="//netdna.bootstrapcdn.com/bootswatch/3.0.0/amelia/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {padding-bottom: 180px
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: -moz-none;
+        -ms-user-select: none;
+        user-select: none;
+
+
+i   }
+
+    .note {
+        position: absolute;
+        background-color: gray;
+/*        height: 150px;*/
+        width: 200px;
+        padding: 8px;
+        border: 1px solid black;
+        cursor: move;
+
+        /* can't select text */
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: -moz-none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+  </style>
+</head>
+
+<body >
+  {{> accounts}}
+  {{> header}}
+  <div class="container">
+      {{#if currentUser}}
+      <div class="col-md-offset-8 col-md-4">
+        <br>
+        <br>
+        <br>
+        {{> name}}
+      </div>
+      {{/if}}
+  </div>
+  <div style="position: absolute; bottom: 20px; left:20px;">
+	<h1>welcome.oiu.ch</h1>
+	{{>stats }}
+  </div>
+</body>
+
+<template name="accounts">
+  <div class="all" style="width: 100%; height: 100%">
+  {{#each users}}
+    {{> user}}
+  {{/each}}
+  </div>
+</template>
+
+<template name="user">
+      <div id="{{this._id}}" class="note" style="top: {{profile.top}}px; left: {{profile.left}}px; z-index: {{formatDate createdAt "X"}}">
+      <p style="width: 100%" class="badge">Hello, I am</p>
+      <h4 style="text-align: center">{{profile.firstname}} {{profile.lastname}}</h4>
+      <h4 style="text-align: center">{{#if profile.org}}({{/if}}{{profile.org}}{{#if profile.org}}){{/if}}</h4>
+      {{emails.[0].address}}<br>
+      <p>
+      Arrived at exactly {{formatDate createdAt "HH:mm:ss"}}
+      </p>
+      </div>
+</template>
+
+<template name="header">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="z-index: 10000000000">
+      <div class="container">
+        <div class="navbar-header" style="width: 100%">
+          <p class="navbar-text pull-right" style="color: white">
+          {{> loginButtons align="right"}}
+          </p>
+          <p class="navbar-text pull-right" style="font-family: 'Lobster',cursive; font-size: 18px; color: white;">
+          Present yourself on welcome.oiu.ch  &nbsp; &nbsp; &nbsp;<img src="arrow.png">
+          </p>
+        </div>
+      </div>
+    </div>
+</template>
+
+<template name="name">
+<form role="form" style="z-index: 10000000000">
+  <div class="form-group">
+    <label>Last Name, Nachname, Nom.</label><br>
+    <input class="form-control" id="lastname" type="text" placeholder="" value="{{currentUser.profile.lastname}}"><br>
+    <label>First Name, Vorname, Prénom.</label><br>
+    <input class="form-control" id="firstname" type="text" placeholder="" value="{{currentUser.profile.firstname}}"><br>
+    <label>Organisation</label><br>
+    <input class="form-control" id="org" type="text" placeholder="" value="{{currentUser.profile.org}}"><br>
+    <label>I like to hear ...</label><br>
+    <select class="form-control" id="language">
+        <option value="" {{currentLang ""}}>...</option>
+        <option value="en" {{currentLang "en"}}>English</option>
+        <option value="de" {{currentLang "de"}}>Deutsch</option>
+        <option value="fr" {{currentLang "fr"}}>Français</option>
+    </select><br>
+    <label>I like most ...</label><br>
+
+    <select class="form-control" id="topic">
+        <option value="" {{currentTopic ""}}>...</option>
+        <option value="tech" {{currentTopic "tech"}}>to hear about the theoretical and technological stuff.</option>
+        <option value="hands" {{currentTopic "hands"}}>to get myself dirty with a Hands-On.</option>
+        <option value="usecase" {{currentTopic "usecase"}}>to learn about stuff looking at real life Use-Cases.</option>
+    </select>
+  </div>
+</form>
+</template>
+
+<template name="stats">
+    {{countLang "de"}} Deutsch | {{countLang "fr"}} Français | {{countLang "en"}} English of total {{countLang}}<br>
+    {{countTopic "hands"}} Hands-On | {{countTopic "tech"}} Techies | {{countTopic "usecase"}} Use-Lovers<br>
+    
+</template>
